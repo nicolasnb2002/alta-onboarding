@@ -39,19 +39,19 @@
     lead: "Compliance no es el área del «no». Es quien define las reglas de la mesa y se hace cargo de los grises.",
     blocks: [
       { type: "h", text: "El Oficial de Cumplimiento" },
-      { type: "p", text: "Las resoluciones UIF exigen que el sujeto obligado persona jurídica designe un Oficial de Cumplimiento, integrante del órgano de administración (por ejemplo, un director), registrado ante la UIF. Es responsable de formular y comunicar los ROS, de que el sistema de prevención funcione y de ser el interlocutor con la UIF. Responde personalmente: las sanciones de la Ley 25.246 alcanzan también al oficial." },
+      { type: "p", text: "La Ley 25.246 (art. 21 inc. f) exige que el sujeto obligado persona jurídica designe un Oficial de Cumplimiento que integre el órgano de administración (por ejemplo, un director). Para bancos, la Res. UIF 14/2023 (art. 11) pide un titular y un suplente, registrados ante la UIF y con autonomía. Es responsable de formular y comunicar los ROS, de que el sistema de prevención funcione y de ser el interlocutor con la UIF. Responde personalmente: las sanciones de la Ley 25.246 alcanzan también al oficial." },
       { type: "h", text: "El sistema de prevención" },
       { type: "ul", items: [
         "Manual de procedimientos aprobado por el directorio: la ley de la mesa.",
         "Autoevaluación de riesgos y matriz de clientes.",
         "Capacitación anual del personal.",
         "Revisión externa independiente (Res. UIF 67-E/2017 y modificatorias para ciertos sectores) y auditoría interna.",
-        "Conservación de registros y legajos: diez años (art. 21 de la Ley 25.246, texto según Ley 27.739).",
+        "Conservación de registros y legajos: diez años como mínimo (art. 21 inc. n de la Ley 25.246, texto según Ley 27.739). Para bancos, la Res. UIF 14/2023 (art. 17) dice desde cuándo se cuentan: desde la operación, o desde la desvinculación o la última transacción, lo que ocurra último.",
         "Código de conducta y canal de denuncias.",
       ] },
       { type: "h", text: "Listas que se consultan" },
       { type: "ul", items: [
-        "RePET: Registro Público de Personas y Entidades vinculadas a actos de Terrorismo y su Financiamiento (Argentina). Incluye las listas del Consejo de Seguridad de la ONU. Un hit positivo implica congelamiento administrativo y aviso inmediato a la UIF: se escala ya.",
+        "RePET: Registro Público de Personas y Entidades vinculadas a actos de Terrorismo y su Financiamiento (Argentina). Incluye las listas del Consejo de Seguridad de la ONU. Un hit positivo implica congelamiento «sin demora e inaudita parte», aviso inmediato a la UIF y ROS de FT sin demora, con 24 horas como máximo (Res. UIF 207/2025, B.O. 4/11/2025, que derogó la 29/2013; para proliferación, Res. UIF 3/2026). Se escala ya.",
         "Listas del Consejo de Seguridad de la ONU (terrorismo y proliferación).",
         "OFAC (EE.UU.), UE, Reino Unido: no son ley argentina, pero casi todas las entidades las consultan por política propia y por corresponsalía bancaria en dólares.",
         "Bases de PEP, noticias negativas (adverse media), deudores del BCRA, cheques rechazados, juicios.",
@@ -75,7 +75,7 @@
   const aml = A.lessons.find((l) => l.id === "aml");
   aml.blocks.push(
     { type: "h", text: "Entidades financieras: qué norma rige hoy" },
-    { type: "p", text: "Para entidades financieras y cambiarias (art. 20 incs. 1 y 2 Ley 25.246) la base es la Res. UIF 14/2023, que reemplazó a la vieja Res. UIF 30/2017 y entró en vigencia de forma diferida. Fue modificada por las Res. UIF 56/2024 y 199/2024, y la Res. UIF 78/2025 actualizó umbrales. Así lo lista hoy la propia UIF en «Resoluciones aplicables a cada sujeto obligado». Para PSP (billeteras, inc. 5) rige la Res. UIF 200/2024; para ALyCs y agentes CNV, la Res. UIF 78/2023; para proveedores de activos virtuales, la Res. UIF 49/2024." },
+    { type: "p", text: "Para entidades financieras y cambiarias (art. 20 incs. 1 y 2 Ley 25.246) la base es la Res. UIF 14/2023, que reemplazó a la vieja Res. UIF 30/2017 y rige desde el 1/4/2023. Fue modificada por las Res. UIF 56/2024 y 199/2024, y la Res. UIF 78/2025 actualizó umbrales. Así lo lista hoy la propia UIF en «Resoluciones aplicables a cada sujeto obligado». Para PSP (billeteras, inc. 5) rige la Res. UIF 200/2024; para ALyCs y agentes CNV, la Res. UIF 78/2023; para proveedores de activos virtuales, la Res. UIF 49/2024." },
     { type: "h", text: "Etapas del lavado, con ejemplos" },
     { type: "ul", items: [
       "Colocación: meter el efectivo al sistema. Ej.: depósitos fraccionados en varias cuentas para no superar umbrales.",
@@ -85,7 +85,7 @@
     { type: "h", text: "Sanciones" },
     { type: "p", text: "El lavado es delito penal (art. 303 del Código Penal). Además, la Ley 25.246 prevé multas administrativas para el sujeto obligado y para el Oficial de Cumplimiento por incumplir los deberes de prevención (identificar, reportar, conservar), y castiga revelar al cliente que se hizo un ROS (tipping-off)." },
     { type: "h", text: "GAFI y la evaluación de Argentina" },
-    { type: "p", text: "Argentina es miembro del GAFI/FATF y de GAFILAT. En 2024 se discutió la evaluación mutua del país (aprobada en el plenario de octubre de 2024 y publicada después) y Argentina no fue incluida en la lista gris. Antes de esa evaluación se sancionó la Ley 27.739 (marzo 2024), que actualizó la Ley 25.246: amplió sujetos obligados (por ejemplo, proveedores de activos virtuales) y creó el registro de beneficiarios finales." },
+    { type: "p", text: "Argentina es miembro del GAFI/FATF y de GAFILAT. En 2024 se discutió la evaluación mutua del país (aprobada en el plenario de octubre de 2024 y publicada el 18/12/2024): Argentina no fue incluida en la lista gris y quedó en seguimiento intensificado («enhanced follow-up»). Antes de esa evaluación se sancionó la Ley 27.739 (marzo 2024), que actualizó la Ley 25.246: amplió sujetos obligados (por ejemplo, proveedores de activos virtuales) y creó el registro de beneficiarios finales." },
   );
 
   // ---- Casos nuevos con errores marcables en el documento (err: id del hallazgo) ----
@@ -94,15 +94,15 @@
       id: "vientos", code: "LG-1344", company: "Vientos del Sur Logística SA", kind: "SA · firmas y fechas", place: "CABA", product: "Cuenta corriente y transferencias inmediatas",
       briefing: "Nuevo: en este caso podés tocar las filas de los documentos que te parezcan mal para marcarlas. Logística mediana, papeles aparentemente completos. Leé las fechas y los números con lupa.",
       docs: [
-        { id: "ficha", title: "Pedido de alta", meta: "Mesa · ficha interna", rows: [R("Razón social", "Vientos del Sur Logística SA"), R("CUIT", "30-71234567-8"), R("Perfil", "$300 millones al año, fletes nacionales."), R("Firma", "Rocío Ferraro, presidenta")] },
-        { id: "cuit", title: "Constancia de inscripción ARCA", meta: "Emitida hace 10 días", rows: [R("Denominación", "VIENTOS DEL SUR LOGISTICA S.A."), R("CUIT", "30-71234576-8", "cuit"), R("Actividad", "Servicios de transporte automotor de cargas"), R("Domicilio fiscal", "Av. Belgrano 1500, CABA")] },
+        { id: "ficha", title: "Pedido de alta", meta: "Mesa · ficha interna", rows: [R("Razón social", "Vientos del Sur Logística SA"), R("CUIT", "30-71234567-1"), R("Perfil", "$300 millones al año, fletes nacionales."), R("Firma", "Rocío Ferraro, presidenta")] },
+        { id: "cuit", title: "Constancia de inscripción ARCA", meta: "Emitida hace 10 días", rows: [R("Denominación", "VIENTOS DEL SUR LOGISTICA S.A."), R("CUIT", "30-71234576-0", "cuit"), R("Actividad", "Servicios de transporte automotor de cargas"), R("Domicilio fiscal", "Av. Belgrano 1500, CABA")] },
         { id: "acta", title: "Acta de asamblea · designación de directorio", meta: "Libro de actas rubricado", rows: [R("Fecha", "15/04/2025"), R("Designa", "Rocío Ferraro presidenta, por tres ejercicios"), R("Inscripción IGJ", "Inscripta el 02/06/2025"), R("Firma de la presidenta", "Firma ológrafa, coincide con DNI")] },
         { id: "estatuto", title: "Estatuto", meta: "IGJ · 2012", rows: [R("Objeto", "Transporte y logística de cargas"), R("Accionistas", "Rocío Ferraro 55%, Martín Ferraro 45%"), R("Directorio", "Uno a tres titulares, mandato de tres ejercicios")] },
         { id: "bal", title: "Estados contables", meta: "Ejercicio cerrado 31/12/2025", rows: [R("Ventas", "$290 millones"), R("Informe del auditor", "Sin salvedades, contador público"), R("Legalización", "Firma del contador sin legalizar por el Consejo Profesional", "legal"), R("Fecha del informe", "10/03/2026")] },
         { id: "bf", title: "DDJJ beneficiario final", meta: "Firmada por la presidenta", rows: [R("Declarados", "Rocío Ferraro 55%, Martín Ferraro 45%"), R("PEP", "Ninguno")] },
       ],
       findings: [
-        { id: "cuit", text: "El CUIT de la constancia no coincide con el de la ficha (dígitos invertidos).", correct: true, why: "30-71234567-8 vs 30-71234576-8. Puede ser error de carga o una constancia de otra sociedad: se pide constancia correcta y se corrige la ficha." },
+        { id: "cuit", text: "El CUIT de la constancia no coincide con el de la ficha (dígitos invertidos).", correct: true, why: "30-71234567-1 vs 30-71234576-0. Puede ser error de carga o una constancia de otra sociedad: se pide constancia correcta y se corrige la ficha." },
         { id: "legal", text: "El informe del auditor no tiene legalización del Consejo Profesional.", correct: true, why: "La firma del contador en estados contables se legaliza ante el Consejo Profesional de Ciencias Económicas de su jurisdicción. Sin eso, el balance no es evidencia confiable." },
         { id: "mandato", text: "El mandato de la presidenta está vencido.", correct: false, why: "Designada en 2025 por tres ejercicios: está vigente." },
         { id: "bfmal", text: "Martín no debería figurar como BF porque no es director.", correct: false, why: "45% supera ampliamente el 10%: es BF aunque no administre." },
@@ -138,7 +138,7 @@
       docs: [
         { id: "ficha", title: "Pedido de alta", meta: "Mesa · ficha interna", rows: [R("Producto", "Cuenta corriente y cobros de exportación"), R("Perfil", "Exportación de fruta fina, USD 2 millones anuales"), R("Operará", "Federico Lanz, apoderado")] },
         { id: "contrato", title: "Contrato social", meta: "Registro Público de Neuquén · 2021", rows: [R("Socios", "Inversora Comahue SA 95%, Federico Lanz 5%"), R("Gerente", "Federico Lanz"), R("Objeto", "Producción y comercialización agrícola")] },
-        { id: "socio", title: "Estatuto de Inversora Comahue SA", meta: "Copia simple sin certificar", rows: [R("Accionistas", "Lucía Bermúdez 50%, Atlantic Seeds LLC (Delaware) 50%", "capas"), R("Beneficiarios de Atlantic Seeds", "No informados", "capas")] },
+        { id: "socio", title: "Estatuto de Inversora Comahue SA", meta: "Copia simple", rows: [R("Certificación", "Copia simple sin certificar", "copia"), R("Accionistas", "Lucía Bermúdez 50%, Atlantic Seeds LLC (Delaware) 50%", "capas"), R("Beneficiarios de Atlantic Seeds", "No informados", "capas")] },
         { id: "bf", title: "DDJJ beneficiario final", meta: "Firmada por Federico Lanz", rows: [R("Declara", "Federico Lanz, por ejercer el control como gerente", "bfmal"), R("PEP", "No")] },
         { id: "poder", title: "Poder general", meta: "Escritura 2023", rows: [R("Otorgante", "Patagonia Agro Inversiones SRL"), R("Apoderado", "Federico Lanz"), R("Facultades", "Abrir y operar cuentas bancarias, firmar cheques, operar comercio exterior")] },
         { id: "arca", title: "Constancia ARCA", meta: "Hace 5 días", rows: [R("Actividad", "Cultivo de frutas de carozo y pepita"), R("Estado", "Activo")] },
@@ -146,6 +146,7 @@
       findings: [
         { id: "capas", text: "La socia controlante tiene un 50% en manos de una LLC de Delaware sin beneficiarios identificados.", correct: true, why: "Hay que seguir la cadena hasta personas humanas. Lucía tiene 50%×95% ≈ 47,5% indirecto (BF). La LLC puede esconder otro BF ≥10%." },
         { id: "bfmal", text: "La DDJJ de BF declara al gerente y omite a los controlantes indirectos.", correct: true, why: "El criterio residual (administración) solo aplica si no se puede identificar a nadie con 10% o control. Acá Lucía Bermúdez es identificable y no está declarada." },
+        { id: "copia", text: "El estatuto de la socia controlante es copia simple sin certificar.", correct: true, why: "Un documento clave para reconstruir el control no puede ir en copia simple: se pide copia certificada (escribano o registro). Suma al pedido que acompaña la escalada." },
         { id: "poderno", text: "El poder no alcanza para abrir cuentas.", correct: false, why: "El poder sí incluye apertura y operación de cuentas. Ojo: mirar siempre facultades, no solo que exista." },
       ],
       decision: "escalar",
@@ -177,13 +178,13 @@
     ["EBR", "Enfoque basado en riesgo: medidas proporcionales al riesgo."],
     ["EDD / Reforzada", "Diligencia reforzada para clientes de alto riesgo: más evidencia y aprobación superior."],
     ["GAFI / FATF", "Grupo de Acción Financiera Internacional. Fija las 40 Recomendaciones."],
-    ["GAFILAT", "Organismo regional del GAFI para Latinoamérica."],
+    ["GAFILAT", "Grupo de Acción Financiera de Latinoamérica: organismo regional al estilo GAFI (FSRB), miembro asociado del GAFI. Argentina es miembro."],
     ["IGJ", "Inspección General de Justicia: registro público de sociedades con sede en CABA."],
     ["KYC", "Know Your Customer: conocé a tu cliente."],
     ["LA/FT/FP", "Lavado de activos, financiación del terrorismo y de la proliferación de armas de destrucción masiva."],
     ["Oficial de Cumplimiento", "Responsable del sistema de prevención ante la UIF; firma los ROS."],
     ["OFAC", "Oficina de Control de Activos Extranjeros de EE.UU. Lista SDN."],
-    ["PEP", "Persona expuesta políticamente. Res. UIF 35/2023, modificada por la 192/2024."],
+    ["PEP", "Persona expuesta políticamente. Lista de la Res. UIF 35/2023, texto según la 192/2024."],
     ["Perfil transaccional", "Lo que se espera que opere el cliente: montos, monedas, contrapartes, países."],
     ["RePET", "Registro Público de Personas y Entidades vinculadas a actos de Terrorismo y su Financiamiento."],
     ["ROS", "Reporte de Operación Sospechosa a la UIF (lavado o financiamiento del terrorismo)."],
@@ -201,7 +202,7 @@
     ["Res. UIF 199/2024 (modifica la 14/2023)", "https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-199-2024-407428"],
     ["Res. UIF 78/2025 (actualización de umbrales)", "https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-78-2025-413643"],
     ["Res. UIF 112/2021 (beneficiario final)", "https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-112-2021-355684/texto"],
-    ["Res. UIF 35/2023 (PEP) y Res. UIF 192/2024", "https://www.argentina.gob.ar/uif/normativa/resoluciones"],
+    ["Res. UIF 35/2023 (PEP) y Res. UIF 192/2024", "https://www.argentina.gob.ar/normativa/nacional/resoluci%C3%B3n-192-2024-407011/texto"],
     ["RePET · Ministerio de Justicia", "https://repet.jus.gob.ar/"],
     ["IGJ · Inspección General de Justicia", "https://www.argentina.gob.ar/justicia/igj"],
     ["ARCA · Constancia de inscripción", "https://www.arca.gob.ar/"],
@@ -237,3 +238,29 @@
   ];
 })();
 window.ALTA.lessons.forEach((l,i)=>{l.num=String(i+1).padStart(2,"0")});
+
+// v3: filas marcables (err) para los 6 casos originales, así los 9 casos se corrigen igual.
+(function () {
+  const A = window.ALTA;
+  const map = {
+    norte: { "acta:Ejercicios cubiertos": "acta" },
+    horizonte: {
+      "bf:Beneficiario final declarado": "bf-soc", "bf:Persona humana detrás": "bf-soc",
+      "instrumento:Capital": "art123", "ficha:Perfil declarado": "perfil", "ficha:Antigüedad": "perfil", "instrumento:Objeto": "perfil", "bf:Origen de fondos": "perfil",
+    },
+    puente: { "ddjj:PEP": "pep", "boletin:Vínculo": "pep" },
+    riodulce: { "hit:Lista de sanciones del proveedor": "hit" },
+    bruma: { "poder:Facultades": "poder", "poder:Plazo": "poder", "luz:Factura": "luz" },
+  };
+  Object.keys(map).forEach((cid) => {
+    const c = A.cases.find((x) => x.id === cid);
+    if (!c) return;
+    Object.keys(map[cid]).forEach((k) => {
+      const [d, l] = k.split(":");
+      const doc = c.docs.find((x) => x.id === d);
+      const row = doc && doc.rows.find((r) => r.label === l);
+      if (row) row.err = map[cid][k];
+      else console.warn("ALTA: fila no encontrada", cid, k);
+    });
+  });
+})();
