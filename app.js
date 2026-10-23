@@ -1,4 +1,4 @@
-const { lessons, docs, cases, questions, questionsToAsk } = window.ALTA;
+const { lessons, docs, cases, questions, questionsToAsk, examExtra, glossary, sources, star, simulacro } = window.ALTA;
 const KEY = "alta-mesa-gh";
 
 function load() {
@@ -16,6 +16,7 @@ const state = {
   lessons: saved.lessons || {},
   cases: saved.cases || {},
   practiced: saved.practiced || {},
+  exam: saved.exam || 0,
 };
 const session = { quiz: null, case: null, openQ: questions[0] ? questions[0].id : null };
 let lastKey = "";
@@ -23,7 +24,7 @@ let lastKey = "";
 function persist() {
   localStorage.setItem(
     KEY,
-    JSON.stringify({ lessons: state.lessons, cases: state.cases, practiced: state.practiced }),
+    JSON.stringify({ lessons: state.lessons, cases: state.cases, practiced: state.practiced, exam: state.exam }),
   );
 }
 
@@ -68,6 +69,7 @@ function shell(body) {
     ["library", "Legajo"],
     ["cases", "Casos"],
     ["interview", "Oral"],
+    ["more", "Más"],
   ];
   const head = home
     ? `<div class="brand"><span class="mark">A</span><strong class="display">ALTA</strong></div>`
@@ -88,15 +90,16 @@ function home() {
   const solved = cases.filter((c) => state.cases[c.id] && state.cases[c.id].passed).length;
   const said = questions.filter((q) => state.practiced[q.id]).length;
   const paths = [
-    ["01", "learn", "Aprender el criterio", "Siete módulos cortos, desde cero, con un control al final de cada uno."],
+    ["01", "learn", "Aprender el criterio", `${lessons.length} módulos cortos, desde cero, con un control al final de cada uno.`],
     ["02", "library", "Leer un legajo", "Doce documentos: qué son, qué mirar y la frase para decirlo en voz alta."],
-    ["03", "cases", "Resolver la mesa", "Seis empresas ficticias. Marcá hallazgos y decidí. Después ves el criterio."],
-    ["04", "interview", "Ensayar el oral", "Doce preguntas con respuesta en cuatro tiempos, y preguntas para hacerles vos."],
+    ["03", "cases", "Resolver la mesa", `${cases.length} empresas ficticias. Tocá los errores en los documentos y decidí.`],
+    ["04", "interview", "Ensayar el oral", "Preguntas con respuesta modelo, STAR y simulacro."],
+    ["05", "more", "Examen, glosario y ficha", "Examen final, glosario, fuentes oficiales y ficha imprimible."],
   ];
   return `
     <p class="kicker">PARA LA ENTREVISTA DE ONBOARDING</p>
     <h1>Conocé al cliente antes de abrirle la puerta.</h1>
-    <p class="lead">Minicurso de KYC, AML y legajos de personas jurídicas en Argentina. Criterio de mesa, documentos y seis sociedades ficticias para aprobar, observar o escalar.</p>
+    <p class="lead">Minicurso de KYC, AML y legajos de personas jurídicas en Argentina. Criterio de mesa, documentos y ${cases.length} sociedades ficticias para aprobar, observar o escalar.</p>
     <section class="stats">
       <div class="stat"><b>${learned}/${lessons.length}</b><span>Módulos</span></div>
       <div class="stat"><b>${solved}/${cases.length}</b><span>Casos</span></div>
@@ -242,7 +245,7 @@ function caseIndex() {
 
 function ensureCase(id) {
   if (!session.case || session.case.id !== id) {
-    session.case = { id, step: "read", doc: 0, selected: [], choice: null };
+    session.case = { id, step: "read", doc: 0, selected: [], flags: [], choice: null };
   }
   return session.case;
 }
@@ -300,13 +303,15 @@ function caseView(id) {
       <span class="muted small">Hoja ${play.doc + 1} de ${item.docs.length}</span>
       <button class="linkish" data-act="doc" data-dir="1" ${play.doc === item.docs.length - 1 ? "disabled" : ""}>Siguiente</button>
     </div>
-    <article class="paper">
+    <p class="muted small">Tocá una fila para marcarla como error (⚑). Las marcas se trasladan a los hallazgos.</p>
+    <article class="paper doc-mock">
+      <span class="stamp" aria-hidden="true">FICTICIO</span>
       <p class="kicker">${esc(sheet.meta)}</p>
       <h2 style="margin-top:0.35rem">${esc(sheet.title)}</h2>
       ${sheet.rows
         .map(
           (row) =>
-            `<div class="rowline"><div class="label">${esc(row.label)}</div><p class="small" style="margin-top:0.25rem">${esc(row.value)}</p></div>`,
+            { const k = sheet.id + ":" + row.label; const on = play.flags.includes(k); return `<button class="rowline flag ${on ? "on" : ""}" data-act="flag" data-k="${esc(k)}" data-err="${row.err || ""}" aria-pressed="${on}"><div class="label">${esc(row.label)}${on ? " · ⚑ marcado" : ""}</div><p class="small" style="margin-top:0.25rem">${esc(row.value)}</p></button>`; },
         )
         .join("")}
       ${sheet.note ? `<p class="note">${esc(sheet.note)}</p>` : ""}
@@ -350,13 +355,26 @@ function caseResult(item, play) {
     <h2>Decisión</h2>
     <p class="small mt">Elegiste ${decisionLabel(play.choice).toLowerCase()}. Correspondía ${verb}.</p>
     <h2>Hallazgos</h2><ul class="bars">${findings}</ul>
-    <h2>Criterio</h2>${item.debrief.map((text) => `<p class="small mt">${esc(text)}</p>`).join("")}
+    ${flagSummary(item, play)}<h2>Criterio</h2>${item.debrief.map((text) => `<p class="small mt">${esc(text)}</p>`).join("")}
     <aside class="phrase"><p class="kicker">FRASE</p><p>${esc(item.phrase)}</p></aside>
     <p class="muted small mt">${esc(item.nextStep)}</p>
     <div class="stack mt">
       <button class="btn ghost" data-act="redo-case">Rehacer el caso</button>
       ${next ? `<button class="btn" data-act="go" data-name="case" data-id="${next.id}">Siguiente caso</button>` : ""}
     </div>`;
+}
+
+function flagSummary(item, play) {
+  const errs = [];
+  item.docs.forEach((d) => d.rows.forEach((r) => { if (r.err) errs.push(d.id + ":" + r.label); }));
+  if (!errs.length && !play.flags.length) return "";
+  const hit = play.flags.filter((k) => errs.includes(k)).length;
+  const fp = play.flags.filter((k) => !errs.includes(k));
+  const miss = errs.filter((k) => !play.flags.includes(k));
+  if (!errs.length) return `<h2>Marcas en documentos</h2><p class="small mt">Marcaste ${play.flags.length} fila(s). En este caso los hallazgos se evalúan en la lista de arriba.</p>`;
+  return `<h2>Marcas en documentos</h2><p class="small mt">Encontraste ${hit} de ${errs.length} filas con error.</p>
+    ${miss.length ? `<p class="oxide small mt">Te faltó: ${miss.map((k) => esc(k.split(":")[1])).join(", ")}</p>` : ""}
+    ${fp.length ? `<p class="oxide small mt">Marcaste sin error: ${fp.map((k) => esc(k.split(":")[1])).join(", ")}</p>` : ""}`;
 }
 
 function interview() {
@@ -385,7 +403,76 @@ function interview() {
     <p class="lead">Contestala en voz alta y recién después abrí la guía.</p>
     <div class="stack mt">${list}</div>
     <h2>Preguntáles vos</h2>
-    <ul class="ask bars">${questionsToAsk.map((q) => `<li>${esc(q)}</li>`).join("")}</ul>`;
+    <ul class="ask bars">${questionsToAsk.map((q) => `<li>${esc(q)}</li>`).join("")}</ul>
+    <h2>Ejemplos STAR</h2><p class="muted small mt">Situación, Tarea, Acción, Resultado. Adaptalos a tu experiencia real: no inventes.</p>
+    ${star.map((x) => `<article class="paper mt"><p class="kicker">${esc(x.q)}</p>${[["S", x.s], ["T", x.t], ["A", x.a], ["R", x.r]].map(([k, v]) => `<p class="small mt"><b>${k}.</b> ${esc(v)}</p>`).join("")}</article>`).join("")}
+    <button class="btn mt-lg" data-act="jump" data-name="sim">Simulacro de entrevista →</button>`;
+}
+
+function more() {
+  const items = [["exam", "Examen final", `${examPool().length} preguntas de todos los módulos. Aprobás con 70%.${state.exam ? " Mejor: " + state.exam + "%" : ""}`], ["sim", "Simulacro de entrevista", "Preguntas al azar con reloj, para contestar en voz alta."], ["glossary", "Glosario", "Siglas y conceptos en una línea."], ["cheat", "Ficha imprimible", "Una hoja para repasar el lunes antes de entrar."], ["sources", "Fuentes oficiales", "Normas y organismos citados."]];
+  return `<p class="kicker">MÁS</p><h1>Cerrar el fin de semana.</h1><div class="mt">${items.map(([n, t, d], i) => `<button class="row" data-act="go" data-name="${n}"><span class="num">${String(i + 1).padStart(2, "0")}</span><span><strong>${t}</strong><span class="muted small">${d}</span></span></button>`).join("")}</div>`;
+}
+
+function examPool() {
+  const pool = [];
+  lessons.forEach((l) => l.quiz.forEach((q) => pool.push(q)));
+  examExtra.forEach((q) => pool.push(q));
+  return pool;
+}
+
+function exam() {
+  const pool = examPool();
+  if (!session.exam) session.exam = { answers: {}, done: false };
+  const e = session.exam;
+  if (e.done) {
+    const ok = pool.filter((q, i) => e.answers[i] === q.correct).length;
+    const pct = Math.round((ok / pool.length) * 100);
+    if (!state.exam || pct > state.exam) { state.exam = pct; persist(); }
+    return `<p class="kicker">EXAMEN FINAL</p><h1>${pct >= 70 ? "Aprobado." : "Todavía no."}</h1><p class="score ${pct >= 70 ? "ok" : "no"}">${pct}%</p>
+      <p class="muted small mt">${ok} de ${pool.length} correctas.</p>
+      <ul class="bars mt">${pool.map((q, i) => e.answers[i] === q.correct ? "" : `<li style="margin-top:.8rem"><p class="small"><b>${esc(q.prompt)}</b></p><p class="sage small mt">${esc(q.options[q.correct])}</p><p class="muted small mt">${esc(q.why)}</p></li>`).join("")}</ul>
+      <button class="btn mt" data-act="exam-reset">Rehacer examen</button>`;
+  }
+  const answered = Object.keys(e.answers).length;
+  return `<p class="kicker">EXAMEN FINAL · ${answered}/${pool.length}</p><h1>Sin ayuda. Elegí y seguí.</h1>
+    ${pool.map((q, i) => `<section class="quiz mt-lg" style="padding:1rem"><p class="kicker">${i + 1}</p><h2 style="margin-top:.4rem">${esc(q.prompt)}</h2>
+      ${q.options.map((o, j) => `<button class="choice ${e.answers[i] === j ? "on" : ""}" data-act="exam-pick" data-q="${i}" data-i="${j}">${esc(o)}</button>`).join("")}</section>`).join("")}
+    <button class="btn mt-lg" data-act="exam-done" ${answered < pool.length ? "disabled" : ""}>Corregir (${answered}/${pool.length})</button>`;
+}
+
+function glossaryView() {
+  return `<p class="kicker">GLOSARIO</p><h1>Siglas sin miedo.</h1><dl class="gloss mt">${glossary.map(([t, d]) => `<dt>${esc(t)}</dt><dd class="small">${esc(d)}</dd>`).join("")}</dl>`;
+}
+
+function sourcesView() {
+  return `<p class="kicker">FUENTES</p><h1>Normas y organismos.</h1>
+    <p class="muted small mt">Verificadas en octubre de 2026 contra las páginas oficiales. Las normas cambian: antes de la entrevista revisá la página de la UIF «Resoluciones aplicables a cada sujeto obligado».</p>
+    <ul class="bars mt">${sources.map(([t, u]) => `<li><a href="${u}" target="_blank" rel="noopener">${esc(t)}</a></li>`).join("")}</ul>`;
+}
+
+function cheat() {
+  const sec = (t, items) => `<section class="cheat-sec"><h3>${t}</h3><ul>${items.map((x) => `<li>${x}</li>`).join("")}</ul></section>`;
+  return `<div class="no-print"><p class="kicker">FICHA</p><button class="btn" onclick="window.print()">Imprimir / guardar PDF</button></div>
+  <div class="cheat">
+    <h1>Ficha de onboarding · PJ Argentina</h1>
+    ${sec("Marco", ["Ley 25.246 (mod. Ley 27.739/2024). UIF regula; art. 20 = sujetos obligados.", "Bancos: Res. UIF 14/2023 (reemplazó a 30/2017), mod. 56/2024, 199/2024; umbrales 78/2025.", "BF: Res. UIF 112/2021 → humano ≥10% capital/votos o control.", "PEP: Res. UIF 35/2023 mod. 192/2024. Cargo + 2 años. Hermanos sí, abuelos no.", "GAFI 40 Recs.; Argentina evaluada en 2024, fuera de lista gris."])}
+    ${sec("Orden de lectura", ["Quién es (estatuto, inscripción, CUIT)", "Quién controla (BF hasta humanos)", "Quién firma (acta vigente, poder con facultades)", "Qué va a hacer (objeto vs actividad vs perfil vs balances)", "PEP / listas (RePET, ONU, OFAC por política)"])}
+    ${sec("Qué cruzar", ["Razón social y CUIT idénticos en todo", "Mandatos vigentes (SA: hasta 3 ejercicios, art. 257 LGS)", "Reformas inscriptas", "Firmas certificadas; balances legalizados por el CPCE", "Domicilio coincidente y reciente", "Fechas coherentes (acta antes de inscripción, constancias recientes)"])}
+    ${sec("Decisión", ["<b>Aprobar</b>: cierra todo y el riesgo es estándar.", "<b>Observar</b>: falta o error subsanable; nada opera hasta que llegue.", "<b>Escalar</b>: PEP, hit, BF opaco, perfil incoherente, sospecha. Decide Compliance.", "Nunca: tipping-off, cerrar un hit solo, aprobar «y después vemos»."])}
+    ${sec("Lavado", ["Colocación → estratificación → integración", "ROS: lo firma el Oficial de Cumplimiento", "Conservación: 10 años"])}
+    <p class="muted small">Material de estudio. Sociedades ficticias.</p>
+  </div>`;
+}
+
+function sim() {
+  if (!session.sim) session.sim = { i: 0, order: simulacro.map((_, i) => i).sort(() => Math.random() - 0.5).slice(0, 8), start: Date.now() };
+  const s = session.sim;
+  if (s.i >= s.order.length) return `<p class="kicker">SIMULACRO</p><h1>Terminaste.</h1><p class="lead">Repasá en Oral las que te costaron.</p><button class="btn mt" data-act="sim-reset">Otro simulacro</button>`;
+  return `<p class="kicker">SIMULACRO · ${s.i + 1}/${s.order.length}</p><h1>${esc(simulacro[s.order[s.i]])}</h1>
+    <p class="lead">Contestá en voz alta. Apuntá a 60–90 segundos: decisión, motivo, próximo paso.</p>
+    <p class="score" id="timer">0s</p>
+    <button class="btn mt" data-act="sim-next">Siguiente pregunta</button>`;
 }
 
 function body() {
@@ -398,6 +485,12 @@ function body() {
   if (v.name === "cases") return caseIndex();
   if (v.name === "case") return caseView(v.id);
   if (v.name === "interview") return interview();
+  if (v.name === "more") return more();
+  if (v.name === "exam") return exam();
+  if (v.name === "glossary") return glossaryView();
+  if (v.name === "sources") return sourcesView();
+  if (v.name === "cheat") return cheat();
+  if (v.name === "sim") return sim();
   return home();
 }
 
@@ -415,6 +508,18 @@ document.getElementById("app").addEventListener("click", (event) => {
   const act = node.dataset.act;
   if (act === "jump") return jump(node.dataset.name);
   if (act === "pop") return pop();
+  if (act === "flag") {
+    const play = session.case; const k = node.dataset.k; const err = node.dataset.err;
+    play.flags = play.flags.includes(k) ? play.flags.filter((x) => x !== k) : [...play.flags, k];
+    if (err) { const any = play.flags.some((f) => { const [d, l] = f.split(":"); const it = cases.find((c) => c.id === play.id); const doc = it.docs.find((x) => x.id === d); const r = doc && doc.rows.find((x) => x.label === l); return r && r.err === err; });
+      play.selected = play.selected.filter((x) => x !== err); if (any) play.selected.push(err); }
+    return render();
+  }
+  if (act === "exam-pick") { session.exam.answers[node.dataset.q] = Number(node.dataset.i); return render(); }
+  if (act === "exam-done") { session.exam.done = true; return render(); }
+  if (act === "exam-reset") { session.exam = null; return render(); }
+  if (act === "sim-next") { session.sim.i++; session.sim.start = Date.now(); return render(); }
+  if (act === "sim-reset") { session.sim = null; return render(); }
   if (act === "go") {
     if (node.dataset.name === "case") session.case = null;
     if (node.dataset.name === "lesson") session.quiz = null;
@@ -484,3 +589,5 @@ document.getElementById("app").addEventListener("click", (event) => {
 });
 
 render();
+
+setInterval(() => { const t = document.getElementById("timer"); if (t && session.sim) t.textContent = Math.round((Date.now() - session.sim.start) / 1000) + "s"; }, 1000);

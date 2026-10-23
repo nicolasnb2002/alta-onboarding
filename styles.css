@@ -98,7 +98,7 @@ main {
 
 .nav {
   position: fixed; inset: auto 0 0 0; z-index: 20;
-  display: grid; grid-template-columns: repeat(5, 1fr);
+  display: grid; grid-template-columns: repeat(6, 1fr);
   border-top: 1px solid var(--line);
   background: var(--ink-2);
 }
@@ -135,4 +135,25 @@ main {
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; }
+}
+
+/* v2 */
+.doc-mock { position: relative; overflow: hidden; background-image: repeating-linear-gradient(0deg, transparent 0 27px, rgba(0,0,0,.035) 27px 28px); }
+.doc-mock .stamp { position: absolute; top: 1.1rem; right: -2.6rem; transform: rotate(28deg); border: 2px solid #b5432f; color: #b5432f; font-weight: 600; letter-spacing: .2em; padding: .15rem 3rem; font-size: .7rem; opacity: .8; pointer-events: none; }
+button.rowline.flag { display: block; width: 100%; text-align: left; background: none; border: 0; border-top: 1px dashed rgba(0,0,0,.15); font: inherit; color: inherit; cursor: pointer; padding: .55rem .4rem; border-radius: 6px; }
+button.rowline.flag:hover { background: rgba(181,67,47,.06); }
+button.rowline.flag:focus-visible { outline: 2px solid #b5432f; outline-offset: 2px; }
+button.rowline.flag.on { background: rgba(181,67,47,.12); box-shadow: inset 3px 0 0 #b5432f; }
+.gloss dt { font-weight: 600; margin-top: .9rem; }
+.gloss dd { margin: .2rem 0 0; }
+.cheat { background: #fff; color: #111; padding: 1.2rem; border-radius: 10px; margin-top: 1rem; }
+.cheat h1 { font-size: 1.4rem; }
+.cheat-sec h3 { margin: .9rem 0 .3rem; font-size: 1rem; }
+.cheat-sec ul { margin: 0; padding-left: 1.1rem; font-size: .9rem; }
+@media print {
+  .top, .nav, .no-print { display: none !important; }
+  body { background: #fff !important; }
+  .cheat { padding: 0; columns: 2; font-size: 11px; }
+  .cheat h1 { column-span: all; }
+  .cheat-sec { break-inside: avoid; }
 }
